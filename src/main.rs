@@ -4,8 +4,9 @@ use clap::Parser;
 use libaoc::Timer;
 
 mod day01;
+mod day02;
 
-const DAYS: &[fn(&mut Timer, input: &str)] = &[day01::solve];
+const DAYS: &[fn(&mut Timer, input: &str)] = &[day01::solve, day02::solve];
 
 /// Run my Advent of Code 2022 solutions
 #[derive(Parser, Debug)]
