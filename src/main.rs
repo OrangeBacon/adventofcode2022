@@ -5,8 +5,9 @@ use libaoc::{PathPattern, Timer};
 
 mod day01;
 mod day02;
+mod day03;
 
-const DAYS: &[fn(&mut Timer, input: &str)] = &[day01::solve, day02::solve];
+const DAYS: &[fn(&mut Timer, input: &str)] = &[day01::solve, day02::solve, day03::solve];
 
 /// Run my Advent of Code 2022 solutions
 #[derive(Parser, Debug)]
