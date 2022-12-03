@@ -2,12 +2,8 @@ use itertools::Itertools;
 use libaoc::Timer;
 
 pub fn solve(timer: &mut Timer, input: &str) -> () {
-    let data = std::fs::read_to_string("./data/day03.txt").unwrap();
-
-    timer.lap("Parse");
-
     let mut a = 0;
-    for (left, right) in data.lines().map(|l| l.split_at(l.len() / 2)) {
+    for (left, right) in input.lines().map(|l| l.split_at(l.len() / 2)) {
         for ch in left.chars() {
             if right.contains(ch) {
                 a += priority(ch);
@@ -18,7 +14,7 @@ pub fn solve(timer: &mut Timer, input: &str) -> () {
     timer.lap("Part 1");
 
     let mut b = 0;
-    for bags in &data.lines().chunks(3) {
+    for bags in &input.lines().chunks(3) {
         let bags = bags.collect_vec();
         for ch in ('a'..='z').chain('A'..='Z') {
             if bags.iter().all(|bag| bag.contains(ch)) {

@@ -53,10 +53,15 @@ fn main() -> ExitCode {
     let path = PathPattern::new(&args.input);
 
     for day in args.days {
-        println!("{}", path.replace(day));
+        let file_name = path.replace(day).into_owned();
+        let file = std::fs::read_to_string(&file_name);
+        let Ok(data) = file else {
+            eprintln!("Unable to open data file `{file_name}`");
+            return ExitCode::FAILURE;
+        };
 
         let mut timer = Timer::now();
-        DAYS[day - 1](&mut timer, "abc");
+        DAYS[day - 1](&mut timer, &data);
 
         println!("{}", timer);
     }

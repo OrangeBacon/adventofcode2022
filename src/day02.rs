@@ -10,8 +10,7 @@ enum Move {
 use Move::*;
 
 pub fn solve(timer: &mut Timer, input: &str) -> () {
-    let data = std::fs::read_to_string("./data/day02.txt").unwrap();
-    let data = data
+    let data = input
         .lines()
         .map(|l| l.split_whitespace().map(Move::from_str).collect_vec())
         .collect_vec();

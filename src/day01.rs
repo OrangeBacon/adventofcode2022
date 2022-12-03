@@ -2,8 +2,7 @@ use itertools::Itertools;
 use libaoc::Timer;
 
 pub fn solve(timer: &mut Timer, input: &str) -> () {
-    let data = std::fs::read_to_string("./data/day01.txt").unwrap();
-    let mut data = data
+    let mut data = input
         .lines()
         .batching(|it| {
             let mut sum = 0;
