@@ -6,8 +6,10 @@ use libaoc::{PathPattern, Timer};
 mod day01;
 mod day02;
 mod day03;
+mod day04;
 
-const DAYS: &[fn(&mut Timer, input: &str)] = &[day01::solve, day02::solve, day03::solve];
+const DAYS: &[fn(&mut Timer, input: &str)] =
+    &[day01::solve, day02::solve, day03::solve, day04::solve];
 
 /// Run my Advent of Code 2022 solutions
 #[derive(Parser, Debug)]
@@ -23,8 +25,8 @@ struct Args {
     /// - `{}` is the day number.
     /// - `{0}` is the day number, 0 padded to be two digits.
     /// - `{{` is a literal `{`, i.e. an escape character.  If the characters after
-    ///   the `{` are not `}` or `0}` then the `{` will be ignored so will not
-    ///   need escaping.
+    ///   the `{` are not `}` or `0}` then the `{` will be ignored (removed from
+    ///   the input string)
     ///
     /// Formatting `a{} b{0} c{{0}}` for day 1 will produce `a1 b01 c{0}}` as an example.
     ///
