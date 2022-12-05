@@ -15,3 +15,4 @@ edition = "2021"
 clap = { version = "4.0.29", features = ["derive", "cargo", "wrap_help"] }
 itertools = "0.10.5"
 libaoc = { path = "./libaoc" }
+regex = "1.7.0"
