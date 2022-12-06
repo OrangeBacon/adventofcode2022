@@ -1,7 +1,7 @@
 use std::process::ExitCode;
 
 use clap::Parser;
-use libaoc::{PathPattern, Timer};
+use libaoc::{DisplayRange, PathPattern, RangeParser, Timer};
 
 mod day01;
 mod day02;
@@ -24,8 +24,19 @@ const DAYS: &[fn(&mut Timer, input: &str)] = &[
 #[command(author, version, about)]
 struct Args {
     /// The days to run
-    #[arg(default_values_t = [DAYS.len()])]
-    days: Vec<usize>,
+    ///
+    /// To reduce the number of parameters, ranges can be input as well as numbers.
+    /// Rust's range syntax is accepted, i.e. `a..b` (exclusive of end),
+    /// `a..=b` (inclusive of end), `a..` (all numbers >= a), `..b` (numbers < b),
+    /// `..=b` (numbers <= b), `..` (all numbers).
+    ///
+    /// The smallest value acceptable is 1 and the largest is the number of the
+    /// most recently solved day.
+    #[arg(
+        value_parser = RangeParser::new(1, DAYS.len()),
+        default_values_t = [DisplayRange::one(DAYS.len())]
+    )]
+    days: Vec<DisplayRange>,
 
     /// The path pattern to use to read the file containing the input data
     ///
@@ -46,23 +57,9 @@ struct Args {
 fn main() -> ExitCode {
     let args = Args::parse();
 
-    if args.days.iter().any(|x| *x > DAYS.len()) {
-        println!(
-            "Specified day out of bounds: got {}, maximum {}",
-            args.days.iter().max().unwrap_or(&1),
-            DAYS.len(),
-        );
-        return ExitCode::FAILURE;
-    }
-
-    if args.days.iter().any(|x| *x == 0) {
-        println!("Days are numbered 1 to n (1 indexed), there is no day 0.");
-        return ExitCode::FAILURE;
-    }
-
     let path = PathPattern::new(&args.input);
 
-    for day in args.days {
+    for day in args.days.into_iter().flatten() {
         let file_name = path.replace(day).into_owned();
         let file = std::fs::read_to_string(&file_name);
         let Ok(data) = file else {
