@@ -13,6 +13,7 @@ mod day07;
 mod day08;
 mod day09;
 mod day10;
+mod day11;
 
 const DAYS: &[fn(&mut Timer, input: &str)] = &[
     day01::solve,
@@ -25,6 +26,7 @@ const DAYS: &[fn(&mut Timer, input: &str)] = &[
     day08::solve,
     day09::solve,
     day10::solve,
+    day11::solve,
 ];
 
 /// Run my Advent of Code 2022 solutions
