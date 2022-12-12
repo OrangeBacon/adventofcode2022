@@ -3,12 +3,14 @@ use std::cmp::Reverse;
 use itertools::Itertools;
 use libaoc::Timer;
 
+#[derive(Clone, Copy)]
 enum Operation {
     Mul(i64),
     Add(i64),
     Square,
 }
 
+#[derive(Clone)]
 struct Monkey {
     starting: Vec<i64>,
     operation: Operation,
@@ -48,7 +50,7 @@ pub fn solve(timer: &mut Timer, _input: &str) -> () {
             no: 1,
         },
     ];
-    let mut input = [
+    let input = [
         Monkey {
             starting: vec![52, 78, 79, 63, 51, 94],
             operation: Operation::Mul(13),
@@ -109,10 +111,21 @@ pub fn solve(timer: &mut Timer, _input: &str) -> () {
 
     timer.lap("Parse");
 
+    let part_1 = run(20, &mut input.clone(), true);
+    timer.lap("Part 1");
+
+    let part_2 = run(10000, &mut input.clone(), false);
+    timer.lap("Part 2");
+
+    println!("Part 1: {part_1}");
+    println!("Part 2: {part_2}");
+}
+
+fn run(steps: usize, input: &mut [Monkey], is_part_1: bool) -> usize {
     let max: i64 = input.iter().map(|x| &x.divisible).product();
 
     let mut inspections = vec![0; input.len()];
-    for _ in 0..10000 {
+    for _ in 0..steps {
         for monkey in 0..input.len() {
             inspections[monkey] += input[monkey].starting.len();
             while let Some(mut worry) = input[monkey].starting.pop() {
@@ -121,7 +134,11 @@ pub fn solve(timer: &mut Timer, _input: &str) -> () {
                     Operation::Add(a) => worry += a,
                     Operation::Square => worry = worry.pow(2),
                 }
-                worry %= &max;
+                if is_part_1 {
+                    worry /= 3;
+                } else {
+                    worry %= &max;
+                }
                 let to = if &worry % &input[monkey].divisible == 0 {
                     input[monkey].yes
                 } else {
@@ -132,17 +149,11 @@ pub fn solve(timer: &mut Timer, _input: &str) -> () {
             }
         }
     }
-    println!("{inspections:?}");
-    let part_1: usize = inspections
+
+    inspections
         .into_iter()
         .map(|x| Reverse(x))
         .k_smallest(2)
         .map(|x| x.0)
-        .product();
-    timer.lap("Part 1");
-
-    timer.lap("Part 2");
-
-    println!("Part 1: {part_1}");
-    // println!("Part 2: {part_2}");
+        .product()
 }
